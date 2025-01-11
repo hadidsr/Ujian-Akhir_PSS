@@ -4,27 +4,146 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Batch Enroll Students</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* Global Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background: #f0f4f8;
+            color: #333;
+        }
+
+        header {
+            background-color: #2563EB;
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.4rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        main {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 12px;
+            color: #333;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        label {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #2563EB;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #333;
+            background: #f9f9f9;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #2563EB;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+
+        button {
+            padding: 12px;
+            background-color: #2563EB;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #1E3A8A;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #6B7280;
+            text-align: center;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background-color: #4B5563;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 15px;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            button, .btn-back {
+                font-size: 0.9rem;
+                padding: 10px 15px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Batch Enroll Students</h1>
-    <form method="POST">
-        {% csrf_token %}
-        <label for="course">Select Course:</label>
-        <select name="course_id" required>
-            {% for course in courses %}
-            <option value="{{ course.id }}">{{ course.name }}</option>
-            {% endfor %}
-        </select><br><br>
+    <header>
+        <h1>Batch Enroll Students</h1>
+    </header>
+    <main>
+        <form method="POST">
+            {% csrf_token %}
+            <label for="course">Select Course:</label>
+            <select name="course_id" id="course" required>
+                {% for course in courses %}
+                <option value="{{ course.id }}">{{ course.name }}</option>
+                {% endfor %}
+            </select>
 
-        <label for="students">Select Students:</label>
-        <select name="student_ids" multiple required>
-            {% for student in students %}
-            <option value="{{ student.id }}">{{ student.username }}</option>
-            {% endfor %}
-        </select><br><br>
+            <label for="students">Select Students:</label>
+            <select name="student_ids" id="students" multiple required>
+                {% for student in students %}
+                <option value="{{ student.id }}">{{ student.username }}</option>
+                {% endfor %}
+            </select>
 
-        <button type="submit">Enroll Students</button>
-    </form>
+            <button type="submit">Enroll Students</button>
+        </form>
+        <a href="{% url 'teacher_dashboard' %}" class="btn-back">Back to Dashboard</a>
+    </main>
 </body>
 </html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Courses</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #6A11CB, #2575FC);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        main {
+            width: 90%;
+            max-width: 1000px;
+            background: white;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            padding: 1.5rem;
+        }
+
+        header {
+            background: linear-gradient(135deg, #6A11CB, #2575FC);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            border-radius: 12px 12px 0 0;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .course-list {
+            list-style: none;
+            padding: 0;
+            margin: 2rem 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .course-list li {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .course-list li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .course-list h3 {
+            margin: 0 0 0.5rem;
+            font-size: 1.5rem;
+            color: #6A11CB;
+            font-weight: bold;
+        }
+
+        .course-list p {
+            margin: 0.5rem 0;
+            color: #555;
+            font-size: 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.7rem 1.2rem;
+            background: #6A11CB;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #5A0EB5;
+        }
+
+        .btn-back {
+            display: block;
+            margin: 2rem auto 0;
+            text-align: center;
+            width: fit-content;
+            background-color: #2575FC;
+        }
+
+        .btn-back:hover {
+            background-color: #1A5DB3;
+        }
+
+        .btn-back-nav {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: #F44336;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .btn-back-nav:hover {
+            background: #C62828;
+        }
+
+        p {
+            text-align: center;
+            font-size: 1rem;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <header>
+            <h1>Available Courses</h1>
+        </header>
+        <section>
+            <!-- Back Button -->
+            <a href="javascript:history.back()" class="btn-back-nav">Go Back</a>
+
+            {% if available_courses %}
+            <ul class="course-list">
+                {% for course in available_courses %}
+                <li>
+                    <h3>{{ course.name }}</h3>
+                    <p>{{ course.description }}</p>
+                    <p><strong>Price:</strong> ${{ course.price }}</p>
+                    <form method="POST" action="{% url 'add_bookmark' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="content_id" value="{{ course.id }}">
+                        <button type="submit" class="btn">Add Bookmark</button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No courses available at the moment.</p>
+            {% endif %}
+            <a href="{% url 'user_dashboard' %}" class="btn btn-back">Back to Dashboard</a>
+        </section>
+    </main>
+</body>
+</html>

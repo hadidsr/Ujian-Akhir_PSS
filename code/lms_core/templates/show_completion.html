@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Completed Contents</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #6A11CB, #2575FC);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        main {
+            width: 90%;
+            max-width: 1100px;
+            background: white;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            padding: 2rem;
+        }
+
+        header {
+            background: linear-gradient(135deg, #6A11CB, #2575FC);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            border-radius: 12px 12px 0 0;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #6A11CB;
+            padding-bottom: 0.5rem;
+        }
+
+        section {
+            margin-bottom: 2rem;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin: 1rem 0;
+            padding: 1.5rem;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .course-group {
+            margin-bottom: 2rem;
+        }
+
+        .course-group h3 {
+            font-size: 1.5rem;
+            color: #6A11CB;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.7rem 1.2rem;
+            background: #6A11CB;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #5A0EB5;
+        }
+
+        .btn-delete {
+            background: #F44336;
+        }
+
+        .btn-delete:hover {
+            background: #D32F2F;
+        }
+
+        .btn-view {
+            background: #00BCD4;
+        }
+
+        .btn-view:hover {
+            background: #0097A7;
+        }
+
+        .btn-generate {
+            background: #FFC107;
+        }
+
+        .btn-generate:hover {
+            background: #FFA000;
+        }
+
+        .btn-back {
+            display: block;
+            margin: 2rem auto 0;
+            width: fit-content;
+            background: #007BFF;
+        }
+
+        .btn-back:hover {
+            background: #0056B3;
+        }
+
+        p {
+            text-align: center;
+            font-size: 1rem;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <header>
+            <h1>Completed Contents</h1>
+        </header>
+        <section>
+            <h2>Your Completed Courses</h2>
+            <ul class="completed-courses">
+                {% for course_data in completed_courses %}
+                <li>
+                    <div>
+                        <h3>{{ course_data.course.name }}</h3>
+                    </div>
+                    <div>
+                        {% if course_data.certificate %}
+                            <a href="{% url 'view_certificate' course_data.certificate.id %}" class="btn btn-view">View Certificate</a>
+                            <form action="{% url 'delete_certificate' course_data.certificate.id %}" method="POST" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-delete">Delete Certificate</button>
+                            </form>
+                        {% else %}
+                            <form action="{% url 'generate_certificate' course_data.course.id %}" method="POST" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-generate">Generate Certificate</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </li>
+                {% empty %}
+                <p>No courses completed yet.</p>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section>
+            <h2>Contents Grouped by Course</h2>
+            {% for course, completions in courses_with_completion.items %}
+            <div class="course-group">
+                <h3>{{ course.name }}</h3>
+                <ul class="completion-list">
+                    {% for completion in completions %}
+                    <li>
+                        <span>{{ completion.content.name }}</span>
+                        <form action="{% url 'delete_completion' completion.id %}" method="POST" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-delete">Delete</button>
+                        </form>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% empty %}
+            <p>No contents completed yet.</p>
+            {% endfor %}
+        </section>
+
+        <a href="{% url 'user_dashboard' %}" class="btn btn-back">Back to Dashboard</a>
+    </main>
+</body>
+</html>

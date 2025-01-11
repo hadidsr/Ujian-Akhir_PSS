@@ -3,33 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Show Profile</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-    <script>
-        // Function to show pop-up
-        function showPopup(message) {
-            alert(message); // Pop-up browser
+    <title>Profile</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #4A90E2, #50C9C3);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-    </script>
+
+        .container {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #4A90E2;
+            margin-bottom: 1rem;
+        }
+
+        section {
+            margin: 1.5rem 0;
+        }
+
+        section p {
+            font-size: 1.1rem;
+            margin: 0.5rem 0;
+            color: #555;
+        }
+
+        section p strong {
+            color: #4A90E2;
+        }
+
+        .btn-edit,
+        .btn-back {
+            display: inline-block;
+            padding: 0.8rem 1.2rem;
+            background-color: #4A90E2;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background 0.3s ease;
+            margin: 0.5rem;
+        }
+
+        .btn-edit:hover,
+        .btn-back:hover {
+            background-color: #357ABD;
+        }
+    </style>
 </head>
 <body>
-    <header>
+    <div class="container">
         <h1>Profile of {{ profile.first_name }} {{ profile.last_name }}</h1>
-    </header>
-    <main>
-        <!-- Notifikasi Pop-Up -->
-        {% if message %}
-        <script>
-            showPopup("{{ message }}");
-        </script>
-        {% endif %}
-
         <section>
+            <p><strong>First Name:</strong> {{ profile.first_name }}</p>
+            <p><strong>Last Name:</strong> {{ profile.last_name }}</p>
             <p><strong>Email:</strong> {{ profile.email }}</p>
         </section>
         <section>
-            <a href="{% url 'edit_profile' %}" class="btn btn-edit">Edit Profile</a>
+            <a href="{% url 'edit_profile' %}" class="btn-edit">Edit Profile</a>
+            <button class="btn-back" onclick="goBack()">Back</button>
         </section>
-    </main>
+    </div>
+
+    <script>
+        // JavaScript function to go back to the previous page
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 </body>
 </html>
